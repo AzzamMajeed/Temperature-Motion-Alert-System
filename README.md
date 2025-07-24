@@ -20,6 +20,30 @@ This project demonstrates how to control an LED using a single push button. Pres
 ### ⚙️ How It Works:
 The Arduino reads the state of the push button. When the button is pressed, it toggles the LED state between ON and OFF. A variable is used to remember the current state of the LED.
 
+### 🧾 Code of Project 1:
+```cpp
+int LED = 5;     // Declaration of the LED pin    
+int button = 8;   // Declaration of the button pin
+
+int state = 0;    // Put 0 in variable state as an initial declaration    
+
+void setup() {
+  pinMode(LED, OUTPUT);  // Declaration of LED as an output device  
+  pinMode(button, INPUT); // Declaration of button as an input device 
+}
+
+void loop() {
+  state = digitalRead(button); 
+
+  if (state == 1) // If the state is 1 (button is pressed)
+  {        
+    digitalWrite(LED, HIGH);     // turn LED on     
+  }
+  else  // If state is not 1 (button is released)
+  {
+    digitalWrite(LED, LOW);      // turn LED off
+  }
+}
 ---
 
 ## 🔷 Project 2: Temperature Display with Motion Detection Alarm
@@ -43,3 +67,37 @@ This project uses a TMP36 sensor to measure temperature and displays the result 
 - The TMP36 sensor outputs an analog voltage that corresponds to the temperature. The Arduino reads this and converts it to Celsius.
 - The temperature is continuously displayed on the LCD.
 - When motion is detected by the IR or PIR sensor, the buzzer is activated to produce a sound alert.
+
+🧾 Code of Project 2:
+cpp
+نسخ
+تحرير
+#include <Wire.h>
+#include <Adafruit_LiquidCrystal.h>
+
+Adafruit_LiquidCrystal lcd(0);
+int tempPin = A0;
+float tempC = 0;
+const int piezoPin = 11;
+
+void setup()
+{
+  lcd.begin(16, 2);
+  Serial.begin(9600);
+}
+
+void loop() {
+  tempC = analogRead(tempPin);
+  tempC = (tempC / 1024.0) * 500; 
+  lcd.setCursor(0, 0);
+  lcd.print("Temp: ");
+  lcd.print(tempC);
+  lcd.print((char)223);
+  lcd.print("C");
+
+  if(tempC > 50) {
+    tone(piezoPin, 1000, 1000); 
+  }
+  
+  delay(1000);
+}
